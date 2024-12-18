@@ -1,0 +1,3 @@
+Copyright Bram Rooseleer
+
+Currenly it is not allowed to use this code in any form.
