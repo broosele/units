@@ -66,10 +66,10 @@ class Unit:
         self.quantity._add_unit(self)
 
     def from_main_unit(self, value):
-        return (value - self.bias)/self.scale
+        return (value)/self.scale - self.bias
 
     def to_main_unit(self, value):
-        return value*self.scale + self.bias
+        return (value + self.bias)*self.scale  
         
     def __eq__(self, other: Self) -> bool:
         return self.quantity == other.quantity and self.symbol == other.symbol and self.scale == other.scale
