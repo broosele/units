@@ -11,7 +11,7 @@ copyright: Bram Rooseleer
 
 from giorgi.prefices import UNARY_PREFIX
 from giorgi.quantities import QuantityType
-from .base_quantities import Length, Time, Mass, Temperature, Current, Amount, Luminosity, PlainAngle
+from .base_quantities import Length, Time, Mass, Temperature, Current, Amount, LuminousIntensity, PlainAngle, SolidAngle
 
 
 # Geometric quantities
@@ -51,9 +51,14 @@ MagneticFlux = QuantityType('Magnetic flux', {Mass: 1, Length: 2, Time: -2, Curr
 MagneticFluxDensity = QuantityType('Magnetic flux density', {Mass: 1, Time: -2, Current: -1}, 'T', 'tesla')
 
 
+# Photometric quantities
+LuminousFlux = QuantityType('Luminous flux', {LuminousIntensity: 1, SolidAngle: 1}, 'lm', 'lumen')
+Illuminance = QuantityType('Illuminance', {LuminousIntensity: 1, SolidAngle: 1, Length: -2}, 'lx', 'lux')
+
+
 # Other
 VolumetricFlowRate = QuantityType('VolumetricFlowRate', {Length: 3, Time: -1})
 Density = QuantityType('Density', {Mass: 1, Length: -3})
-MassFlowRate = QuantityType('MassFlowRate', {Mass: 1, Time: -1})
-HeatCapacity = QuantityType('HeatCapacity', {Mass: 1, Length: 2, Time: -2, Temperature: -1})
-SpecificHeatCapacity = QuantityType('SpecificHeatCapacity', {Length: 2, Time: -2, Temperature: -1})
+MassFlowRate = QuantityType('Mass flow rate', {Mass: 1, Time: -1})
+HeatCapacity = QuantityType('Heat capacity', {Mass: 1, Length: 2, Time: -2, Temperature: -1})
+SpecificHeatCapacity = QuantityType('Specific heat capacity', {Length: 2, Time: -2, Temperature: -1})

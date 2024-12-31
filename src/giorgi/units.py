@@ -8,7 +8,7 @@ copyright: Bram Rooseleer
 
 from typing import Optional, Self
 
-from giorgi.prefices import UNARY_PREFIX, Prefix
+from giorgi.prefices import DECIMAL_PREFICES, UNARY_PREFIX, Prefix
 from giorgi.shared import exponent_superscript
 
 
@@ -32,12 +32,13 @@ class Unit:
     def create_set(
             quantity: 'Quantity',
             symbol: str,
-            prefices: list[Prefix],
+            prefices: list[Prefix] = DECIMAL_PREFICES,
             main_prefix: Prefix = UNARY_PREFIX,
+            scale: float = 1.0,
             name: Optional[str] = None,
             bias: float = 0.0,
         ) -> Self:
-        scale = 1/main_prefix.scale
+        scale = scale/main_prefix.scale
         return {prefix: Unit.create(quantity=quantity, symbol=symbol, prefix=prefix, scale=scale, name=name, bias=bias) for prefix in prefices}[main_prefix]
         
     def __init__(self,
