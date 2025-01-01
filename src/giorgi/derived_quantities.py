@@ -1,6 +1,6 @@
 """ giorgi - derived quantities
 
-This module creates the physical derived quantities of the SI system.
+This module creates the physical derived quantities.
 
 To be completed.
 
@@ -8,10 +8,8 @@ author: Bram Rooseleer
 copyright: Bram Rooseleer
 """
 
-
-from giorgi.prefices import UNARY_PREFIX
 from giorgi.quantities import QuantityType
-from .base_quantities import Length, Time, Mass, Temperature, Current, Amount, LuminousIntensity, PlainAngle, SolidAngle
+from .base_quantities import Length, Time, Mass, Temperature, Current, LuminousIntensity, PlainAngle, SolidAngle
 
 
 # Geometric quantities

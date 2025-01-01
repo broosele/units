@@ -11,13 +11,14 @@ copyright: Bram Rooseleer
 import math
 from giorgi.prefices import BINARY_PREFICES, DECIMAL_PREFICES
 from giorgi.units import Unit
-from .base_quantities import Length, Time, Mass, Temperature, Current, Amount, LuminousIntensity, Information, PlainAngle
+from .base_quantities import Length, Time, Mass, Temperature, Information, PlainAngle
 from .derived_quantities import Area, Volume, Pressure, Energy, Conductance
 
 
 # Geometric quantities
 #length
 Unit(quantity=Length, symbol='Å', scale=1e-10, name='ångström')
+Unit(quantity=Length, symbol='ly', scale=9460730472580800, name='light-year')
 foot = 0.3048
 Unit(quantity=Length, symbol='twip', scale=foot/17280, name='twip')
 Unit(quantity=Length, symbol='th', scale=foot/12000, name='thou')
@@ -85,6 +86,7 @@ Unit.create_set(quantity=Pressure, symbol='bar', scale=1e5, name='bar')
 Unit(quantity=Pressure, symbol='atm', scale=1.01325e5, name='atmosphere')
 Unit(quantity=Pressure, symbol='psi', scale=6894.757, name='pound-force per square inch')
 Unit(quantity=Energy, symbol='Wh', scale=3600, name='watt-hour')
+Unit.create_set(quantity=Energy, symbol='eV', scale=1.602176634e-19, name='electron-volt')
 
 
 # Electrical quantities

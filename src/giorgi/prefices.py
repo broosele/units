@@ -6,16 +6,16 @@ author: Bram Rooseleer
 copyright: Bram Rooseleer
 """
 
-from functools import cache
 import math
+from typing import Self
 
 
 class Prefix:
 
-    existing = {}
+    existing: dict[tuple[str, str, float], Self] = {}
 
     @staticmethod
-    def make(name: str, symbol: str, exponent: int, radix: int):
+    def make(name: str, symbol: str, exponent: int, radix: int) -> Self:
         """Create a new Prefix, or if an identical Prefix already exists, return it."""
         scale = radix**exponent
         key = name, symbol, scale
@@ -38,18 +38,16 @@ class Prefix:
     def __hash__(self):
         return hash((self.name, self.symbol, self.scale))
 
-    def is_power_of(self, radix):
+    def is_power_of(self, radix: int) -> bool:
+        """Return whether the scale of this prefix is a power of the given radix."""
         return math.log(self.scale, radix).is_integer()
     
-    def exponent(self, radix):
+    def exponent(self, radix: int) -> float:
+        """Return the exponent to which the given radix needs to be raised to get the scale of this prefix."""
         exponent = math.log(self.scale, radix)
         if not math.isclose(exponent, round(exponent)):
-            print(exponent)
             raise ValueError()
         return round(exponent)
-    
-
-UNARY_PREFIX = Prefix.make('', '', 0, radix=1)
 
 
 DECIMAL_PREFICES: tuple[Prefix] = tuple(Prefix.make(*values, radix=10) for values in [
@@ -104,6 +102,10 @@ DECIMAL_PREFIX_BY_EXPONENT: dict[int, Prefix] = {prefix.exponent(10): prefix for
 
 BINARY_PREFIX_BY_EXPONENT: dict[int, Prefix] = {prefix.exponent(2): prefix for prefix in BINARY_PREFICES}
 """A mapping of exponents to their corresponding binary prefices."""
+
+
+UNARY_PREFIX = DECIMAL_PREFIX_BY_EXPONENT[0]
+"""The prefix with scale 1."""
 
 
 def si_prefix(value: float) -> Prefix:

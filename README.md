@@ -1,6 +1,7 @@
 # giorgi
 A library to work with units and quantities. These can be used for type hints, unit conversion and formatting.
 
+
 ## Quantities
 
 Instances of quantities can be created and printed:
@@ -73,6 +74,33 @@ Supported operations for quantity types are:
 * ==, !=: between quantity types
 
 
+## Units
+Quantity types can have different units associated with them. They all have a scale, relative to the 'main' unit. Each quantity can be expressed in terms of every unit associated with their quantity type. Many units are predefined.
+> l0 = Length(1)
+> print(l0.in_unit('mm'))
+1000.0
+> print(l0.in_unit('"'))
+39.370078740157474
+
+Extra units can be created and associated with its quantity:
+> Unit(quantity=Length, symbol='Bs', scale=5e-9, name='Beard-second')
+Unit('Length', 'Bs', scale=5e-09, bias=0.0)
+> print(f"{Length(nm=1):Bs}") 
+0.2 Bs
+
+You can also create a whole set of units with different prefices in one go:
+> Unit.create_set(quantity=Length, symbol='Bs', scale=5e-9, name='Beard-second')
+Unit('Length', 'Bs', scale=5e-09, bias=0.0)
+> print(f"{Length(nm=1):μBs}")
+200000.0 μBs
+
+
+## Formatting
+Quantities can be formatted using the same formatting mini-language as used for floats, but with the preferred unit at the end:
+> print(f"{Volume(hl=1):.>10.6gal}")
+...21.9969 gal
+
+
 ## A note about temperatures
 Different temperature scales have different starting points. The internal representation of a temperature in
 this package is always in Kelvin. This has some potentially unexpected results:
@@ -99,7 +127,21 @@ Similarly
 > print(f"{T1 - T0:K}")
 5.0 K
 
+
+## A note about currencies
+Each currency is seen as separate base quantity. The most commonly used currencies are already created,
+but you can create your own if needed:
+> KRW = BaseQuantityType('South Korean Won', unit_symbol='₩', unit_name='South Korean Won')
+
+To convert between currencies, you need to define a conversion rate:
+> won_eur = KRW(1)/EUR(0.00065)
+> amount_in_won = KRW(1000_000)
+> print(amount_in_euro := amount_in_won/won_eur)
+650.000 €
+
+
 ## Things to add
 * better system to work with temperatures
 * integration of the python standard Time module
 * non-integer powers of quantities
+* extra formatting options (e.g. ommitting unit)

@@ -20,9 +20,11 @@ SUPERSCRIPTS: dict[str, str] = {
     '8': '⁸',
     '9': '⁹',
 }
+"""A mapping of number characters on their superscript version."""
 
 
-def exponent_superscript(exponent: int) -> str:
+def exponent_superscript(exponent: int) -> str: 
+    """Return a string representing the given integer in superscript."""
     if exponent == 1:
         return ''
     return ''.join(SUPERSCRIPTS[c] for c in str(exponent))

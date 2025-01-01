@@ -1,6 +1,6 @@
 """ giorgi - base quantities
 
-This module creates the base quantities:
+This module creates the most important base quantities:
 - physical quantities of the SI system
 - information
 - angles

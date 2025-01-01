@@ -12,14 +12,14 @@ from functools import reduce
 import math
 from typing import Optional, Self, TypeVar
 
-from giorgi.prefices import DECIMAL_PREFICES, DECIMAL_PREFIX_BY_EXPONENT, Prefix
+from giorgi.prefices import DECIMAL_PREFICES, UNARY_PREFIX, Prefix
 from giorgi.shared import exponent_superscript
 from giorgi.units import Unit
 
 
+QUANTITYTYPE = TypeVar('Quantity') | int | float
 """A type variable to descibes the type which is considered a quantity,
 including dimensionless quantities which are represented by numerical values."""
-QUANTITYTYPE = TypeVar('Quantity') | int | float
 
 
 class Quantity:
@@ -104,14 +104,10 @@ class Quantity:
         
         Only quantities of the same type can be added.
         """
-        # if isinstance(other, (float, int)) and other == 0:
-        #     return self
         if type(self) != type(other):
             raise TypeError("Can only add quantities of same type together")
         return type(self)(self.value + other.value)
-    
-    # def __radd__(self, other: Self) -> Self:
-    #     return self + other
+
     
     def __sub__(self, other: Self) -> Self:
         """Return a quantity that represents the difference between this an the other quantity.
@@ -119,9 +115,6 @@ class Quantity:
         Only quantities of the same type can be subtracted.
         """
         return self + -other
-    
-    # def __rsub__(self, other: Self) -> Self:
-    #     return other + -self
     
     def __mul__(self, other: QUANTITYTYPE) -> QUANTITYTYPE:
         """Return a quantity (or numerical value) that represents the multiplication of this and
@@ -225,7 +218,7 @@ class QuantityType(type):
                 if exponent
         )
     
-    def __new__(cls, name, base_quantities, *args, **kwargs) -> Self:
+    def __new__(cls, name, base_quantities: dict['BaseQuantity', int], *args, **kwargs) -> Self:
         """Ensures all quantity types instances inherit from Quantity."""
         return super().__new__(cls, name, (Quantity,), {})
 
@@ -254,7 +247,7 @@ class QuantityType(type):
             base_quantities: dict['BaseQuantity', int],
             unit_symbol: Optional[str] = None,
             unit_name: Optional[str] = None,
-            main_unit_prefix: Prefix = DECIMAL_PREFIX_BY_EXPONENT[0],
+            main_unit_prefix: Prefix = UNARY_PREFIX,
             prefices: list[Prefix] = DECIMAL_PREFICES,
         ):
         """Create a new quantity type.
@@ -278,7 +271,7 @@ class QuantityType(type):
             unit_scale = reduce(lambda a, b: a*b, (base_quantity.main_unit.scale**exponent for base_quantity, exponent in hashable_base_quantities))
             self.main_unit = Unit(self, symbol=unit_symbol, scale=unit_scale)
         else:
-            self.main_unit = Unit.create_set(self, symbol=unit_symbol, prefices=prefices, main_prefix=main_unit_prefix, name=unit_name)
+            self.main_unit = Unit.create_set(self, symbol=unit_symbol, scale=1, prefices=prefices, main_prefix=main_unit_prefix, name=unit_name)
         if self.main_unit.scale != 1 or self.main_unit.bias != 0:
             raise ValueError("Main units should have scale 1 and bias 0.")
         hashable_base_quantities = QuantityType._hashable_base_quantities(base_quantities)
@@ -327,8 +320,7 @@ class QuantityType(type):
     def __eq__(self, other: Self) -> bool:
         """Return whether the given quantity type is the same as this quantity type."""
         return self is other
-        # return QuantityType._hashable_base_quantities(self.base_quantities) == QuantityType._hashable_base_quantities(other.base_quantities)
-    
+
     def _add_unit(self, unit: Unit):
         """Add the given unit to the list of available units for this quantity type."""
         self._units[unit.symbol] = unit
@@ -354,6 +346,3 @@ class BaseQuantityType(QuantityType):
 
     def __hash__(self):
         return hash(self.__name__)
-    
-    # def __eq__(self, other: Self):
-    #     return self is other
