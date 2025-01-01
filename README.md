@@ -141,6 +141,8 @@ To convert between currencies, you need to define a conversion rate:
 
 
 ## Things to add
+* adding more derived quantities
+* adding more units
 * better system to work with temperatures
 * integration of the python standard Time module
 * non-integer powers of quantities
